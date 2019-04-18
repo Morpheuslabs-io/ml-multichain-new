@@ -22,7 +22,7 @@ services:
     stdin_open: true
     container_name: jax-2830315-masternode-0-1
   jax-2830315-slavenode-0-1:
-    image: mlabsg/ml-multichain-node
+    image: mlabsg/ml-multichain-slave
     tty: true
     ports:
     - 7557
