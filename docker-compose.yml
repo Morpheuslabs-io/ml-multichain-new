@@ -1,0 +1,73 @@
+version: "3"
+services:
+  jax-2830315-masternode-0-1:
+    image: mlabsg/ml-multichain-master
+    tty: true
+    ports:
+    - 7557
+    - 29104:8002
+    environment:
+    - CHAINNAME=jax
+    - NETWORK_PORT=7557
+    - RPC_PORT=8002
+    - RPC_USER=admin
+    - RPC_PASSWORD=49E7VVPEE
+    - RPC_ALLOW_IP=0.0.0.0/0.0.0.0
+    - PARAM_TARGET_BLOCK_SIZE=target-block-time|30
+    - PARAM_ANYONE_CAN_CONNECT=anyone-can-connect|true
+    - PARAM_ANYONE_CAN_MINE=anyone-can-mine|true
+    networks:
+      chainnet:
+        ipv4_address: 172.113.169.102
+    stdin_open: true
+    container_name: jax-2830315-masternode-0-1
+  jax-2830315-slavenode-0-1:
+    image: mlabsg/ml-multichain-node
+    tty: true
+    ports:
+    - 7557
+    - 8002
+    environment:
+    - CHAINNAME=jax
+    - NETWORK_PORT=7557
+    - RPC_PORT=8002
+    - RPC_USER=admin
+    - RPC_PASSWORD=49E7VVPEE
+    - RPC_ALLOW_IP=0.0.0.0/0.0.0.0
+    - MASTER_NODE=jax-2830315-masternode-0-1
+    networks:
+      chainnet:
+        ipv4_address: 172.113.169.99
+    stdin_open: true
+    depends_on:
+    - jax-2830315-masternode-0-1
+    container_name: jax-2830315-slavenode-0-1
+  jax-2830315-explorernode-0-1:
+    image: mlabsg/ml-multichain-explorer
+    tty: true
+    ports:
+    - 44288:2750
+    - 7557
+    - 8002
+    environment:
+    - CHAINNAME=jax
+    - NETWORK_PORT=7557
+    - RPC_PORT=8002
+    - RPC_USER=admin
+    - RPC_PASSWORD=49E7VVPEE
+    - RPC_ALLOW_IP=0.0.0.0/0.0.0.0
+    - MASTER_NODE=jax-2830315-masternode-0-1
+    networks:
+      chainnet:
+        ipv4_address: 172.113.169.100
+    stdin_open: true
+    depends_on:
+    - jax-2830315-masternode-0-1
+    container_name: jax-2830315-explorernode-0-1
+networks:
+  chainnet:
+    driver: bridge
+    ipam:
+      config:
+      - subnet: 172.113.169.0/24
+
